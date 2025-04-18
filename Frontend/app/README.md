@@ -29,3 +29,6 @@ npm install
 
 # Start the development server
 npm start
+
+# Additional libraries
+npm install @mui/material @mui/icons-material @emotion/react @emotion/styled @mui/lab
