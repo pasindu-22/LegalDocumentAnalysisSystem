@@ -32,7 +32,7 @@ const AppLayout = ({ children }) => {
   ];
 
   return (
-    <Box sx={{ display: 'flex', height: '100vh', bgcolor: 'background.default' }}>
+    <Box sx={{ display: 'flex', height: '100vh', bgcolor: 'background.default', overflow: 'hidden' }}>
       <AppBar 
         position="fixed" 
         sx={{ 
@@ -202,12 +202,14 @@ const AppLayout = ({ children }) => {
       </Drawer>
       
       <Box component="main" sx={{ 
-        flexGrow: 1, 
-        p: 3, 
-        width: { sm: `calc(100% - ${DRAWER_WIDTH}px)` },
-        mt: 8,
-        height: '100%',
-        overflow: 'auto'
+      flexGrow: 1,
+      p: 3, 
+      width: { sm: `calc(100% - ${open ? DRAWER_WIDTH : 64}px)` }, // Updated to account for collapsed drawer
+      mt: 8,
+      height: 'calc(100vh - 64px)', // Adjust for AppBar height
+      overflow: 'auto', // Only this element should scroll
+      display: 'flex',
+      flexDirection: 'column'
       }}>
         {children}
       </Box>
