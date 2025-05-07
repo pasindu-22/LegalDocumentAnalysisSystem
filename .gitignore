@@ -11,6 +11,8 @@ env/
 venv/
 ENV/
 Backend/app/env/
+backend/venv/
+backend/.env
 
 # Python dependency/tool caches
 .mypy_cache/
@@ -18,26 +20,7 @@ Backend/app/env/
 .pytype/
 .pylint.d/
 
-# Log and DB files
-*.log
-*.sqlite3
-*.db
 
-# PyInstaller artifacts
-*.spec
-dist/
-build/
-
-# Test coverage and tox
-.coverage
-htmlcov/
-.tox/
-.nox/
-
-# IDE/editor configs
-.vscode/
-.idea/
-*.swp
 
 # Frontend specific
 Frontend/app/node_modules/
@@ -47,12 +30,8 @@ Frontend/app/build/
 Frontend/app/.env
 Frontend/app/.env.*
 
-# Jupyter notebooks (if added later)
-.ipynb_checkpoints/
 
 # FastAPI/uvicorn logs
 *.uvicorn.log
 
-# macOS / Windows OS junk
-.DS_Store
-Thumbs.db
+
