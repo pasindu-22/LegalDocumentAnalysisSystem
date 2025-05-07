@@ -1,2 +1,13 @@
 backend/venv/
 backend/.env
+
+# Ignore __pycache__ directories
+__pycache__/
+
+*.pyc
+*.pyo
+# Ignore Python bytecode files
+
+node_modules/
+build/
+dist/
