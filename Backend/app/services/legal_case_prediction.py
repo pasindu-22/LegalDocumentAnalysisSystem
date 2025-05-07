@@ -42,8 +42,20 @@ async def extract_case_details(pdf_path):
 def extract_case_details_sync(pdf_path):
     """
     Synchronous wrapper for the async extraction function
+    that doesn't create and close event loops repeatedly
     """
-    return asyncio.run(extract_case_details(pdf_path))
+    # Create a new event loop only if one doesn't exist
+    try:
+        loop = asyncio.get_event_loop()
+        if loop.is_closed():
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+    except RuntimeError:  # No event loop exists
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+    
+    # Run the coroutine without closing the loop
+    return loop.run_until_complete(extract_case_details(pdf_path))
 
 # --------------------------
 # Step 3: Preprocessing for NLP

@@ -24,7 +24,7 @@ llm = ChatGoogleGenerativeAI(
 text_splitter = RecursiveCharacterTextSplitter(
     chunk_size=5000, chunk_overlap=100)
 
-file_path = r"E:\projects\LegalDocumentAnalysisSystem\Backend\app\assets\legalcase_demo.pdf"
+file_path = r"app/assets/legalcase_demo.pdf"
 
 
 async def summarize_chunk(text: str):
@@ -90,6 +90,32 @@ async def process_pdf(file_path):
     final_result = await extract_case_summary(combined_summary)
     return final_result
 
+# Mock version of process_pdf function for testing purposes
+# async def process_pdf(file_path):
+#     """
+#     TEMPORARY MOCK VERSION - Returns mock data instead of making API calls
+#     Comment out this version and uncomment the original when ready to use real API calls
+#     """
+#     print("Using mock data instead of API calls for testing")
+    
+#     # Mock data that mimics the structure of real extraction results
+#     mock_result = {
+#         "decision_type": "majority opinion",
+#         "disposition": "affirmed",
+#         "first_party": "United States",
+#         "second_party": "Jones",
+#         "facts": """This case concerns a dispute over property rights in a commercial district. 
+#                  The plaintiff argued that zoning regulations unfairly restricted their ability to develop 
+#                  the property for commercial use. The lower court ruled in favor of the defendant, 
+#                  finding that the zoning regulations were properly applied and served legitimate 
+#                  public interests. Evidence presented included property surveys, expert testimony on 
+#                  land valuation, and historical records of land use in the area."""
+#     }
+    
+#     # Simulate some processing delay to mimic API call timing
+#     await asyncio.sleep(0.5)
+    
+#     return mock_result
 
 async def main():
     result = await process_pdf(file_path)
