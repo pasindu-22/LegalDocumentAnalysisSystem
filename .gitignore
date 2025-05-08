@@ -1,15 +1,38 @@
+# Byte-compiled / cache
+**/__pycache__/
+**/*.py[cod]
+*$py.class
+__pycache__/
+*.pyc
+*.pyo
+
+# Environment files and folders (virtual env, Python)
+.env
+.env.*
+env/
+.venv/
+venv/
+ENV/
+Backend/app/env/
 backend/venv/
 backend/.env
 
+# Python dependency/tool caches
+.mypy_cache/
+.pyre/
+.pytype/
+.pylint.d/
 
-# Ignore __pycache__ directories
-__pycache__/
-
-*.pyc
-*.pyo
-# Ignore Python bytecode files
-
+# Frontend specific
+Frontend/app/node_modules/
+Frontend/app/.next/
+Frontend/app/dist/
+Frontend/app/build/
+Frontend/app/.env
+Frontend/app/.env.*
 node_modules/
 build/
 dist/
 
+# FastAPI/uvicorn logs
+*.uvicorn.log
