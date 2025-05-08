@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Depends
 from sqlmodel import Session, select
 from db import engine, get_session
-from routers import auth
+from routers import auth,documents
 
 app = FastAPI()
 
@@ -14,3 +14,4 @@ app = FastAPI()
 #         return {"message": "❌ Database connection failed", "error": str(e)}
 
 app.include_router(auth.router)
+app.include_router(documents.router)
