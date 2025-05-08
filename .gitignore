@@ -2,6 +2,9 @@
 **/__pycache__/
 **/*.py[cod]
 *$py.class
+__pycache__/
+*.pyc
+*.pyo
 
 # Environment files and folders (virtual env, Python)
 .env
@@ -20,8 +23,6 @@ backend/.env
 .pytype/
 .pylint.d/
 
-
-
 # Frontend specific
 Frontend/app/node_modules/
 Frontend/app/.next/
@@ -29,9 +30,9 @@ Frontend/app/dist/
 Frontend/app/build/
 Frontend/app/.env
 Frontend/app/.env.*
-
+node_modules/
+build/
+dist/
 
 # FastAPI/uvicorn logs
 *.uvicorn.log
-
-
