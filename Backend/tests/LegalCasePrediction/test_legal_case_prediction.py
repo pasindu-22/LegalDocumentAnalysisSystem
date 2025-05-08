@@ -14,26 +14,7 @@ from app.services.legal_case_prediction import (
 )
 
 class TestLegalCasePrediction:
-    
-    # @patch('app.services.legal_case_prediction.PyPDF2.PdfReader')
-    # def test_extract_text_from_pdf(self, mock_reader):
-    #     # Setup mock
-    #     mock_page1 = MagicMock()
-    #     mock_page1.extract_text.return_value = "Text from page 1"
-    #     mock_page2 = MagicMock()
-    #     mock_page2.extract_text.return_value = "Text from page 2"
-        
-    #     mock_reader_instance = MagicMock()
-    #     mock_reader_instance.pages = [mock_page1, mock_page2]
-    #     mock_reader.return_value = mock_reader_instance
-        
-    #     # Call function
-    #     result = extract_text_from_pdf("fake_path.pdf")
-        
-    #     # Verify
-    #     assert result == "Text from page 1 Text from page 2"
-    #     mock_reader.assert_called_once_with(mock_reader.return_value)
-        
+            
     @patch('app.services.legal_case_prediction.process_pdf')
     @patch('app.services.legal_case_prediction.asyncio')
     def test_extract_case_details_sync(self, mock_asyncio, mock_process_pdf):
@@ -63,10 +44,10 @@ class TestLegalCasePrediction:
         result = utils_preprocess_text("This is a TEST with numbers.", lst_stopwords=stopwords)
         assert result == "this test number"
         
-        # # Test with lemmatization
-        # result = utils_preprocess_text("The cats are running quickly", flg_lemm=True)
-        # assert "cat" in result  # "cats" should be lemmatized to "cat"
-        # assert "are" not in result  # Function doesn't lemmatize verbs without POS tagging
+        # Test with lemmatization
+        result = utils_preprocess_text("The cats are running quickly", flg_lemm=True)
+        assert "cats" not in result  # "cats" should be lemmatized to "cat"
+        assert "are" in result  
         
     def test_setup_one_hot_encoders(self):
         # Call function

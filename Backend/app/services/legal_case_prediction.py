@@ -2,7 +2,6 @@ import re
 import json
 import nltk
 import joblib
-import PyPDF2
 import numpy as np
 import pandas as pd
 import scipy.sparse
@@ -22,15 +21,7 @@ nltk.download('stopwords')
 nltk.download('wordnet')
 
 # --------------------------
-# Step 1: PDF to Raw Text
-# --------------------------
-# def extract_text_from_pdf(pdf_path):
-#     with open(pdf_path, 'rb') as f:
-#         reader = PyPDF2.PdfReader(f)
-#         return ' '.join(page.extract_text() for page in reader.pages if page.extract_text())
-
-# --------------------------
-# Step 2: Extraction using extractor.py
+#  Extraction using extractor.py
 # --------------------------
 async def extract_case_details(pdf_path):
     """
@@ -58,7 +49,7 @@ def extract_case_details_sync(pdf_path):
     return loop.run_until_complete(extract_case_details(pdf_path))
 
 # --------------------------
-# Step 3: Preprocessing for NLP
+#  Preprocessing for NLP
 # --------------------------
 def utils_preprocess_text(text, flg_stemm=False, flg_lemm=True, lst_stopwords=None):
     text = re.sub(r'[^\w\s]', '', str(text).lower().strip())
@@ -74,7 +65,7 @@ def utils_preprocess_text(text, flg_stemm=False, flg_lemm=True, lst_stopwords=No
     return " ".join(lst_text)
 
 # --------------------------
-# Step 4: One-Hot Encoding Setup
+#  One-Hot Encoding Setup
 # --------------------------
 def setup_one_hot_encoders():
     # Define possible values for categorical features
@@ -99,9 +90,9 @@ def setup_one_hot_encoders():
     
     return decision_type_encoder, disposition_encoder
 
-# --------------------------
-# Step 5: Main Pipeline
-# --------------------------
+# --------------------
+#  Main Pipeline
+# --------------------
 def main(pdf_path):
     try:
         # Load trained vectorizer, LDA model, and prediction model
