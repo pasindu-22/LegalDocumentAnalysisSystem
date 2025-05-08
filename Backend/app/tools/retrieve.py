@@ -1,5 +1,5 @@
 from langchain_core.tools import tool
-from app.services.vector_store import vector_store
+from services.vector_store import vector_store
 
 
 @tool(response_format="content_and_artifact")

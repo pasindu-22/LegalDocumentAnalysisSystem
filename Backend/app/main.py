@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Depends
 from sqlmodel import Session, select
 from db import engine, get_session
-from routers import auth,documents,predict
+from routers import auth,documents,predict,chat
 
 app = FastAPI(debug=True)
 
@@ -16,3 +16,4 @@ app = FastAPI(debug=True)
 app.include_router(auth.router)
 app.include_router(documents.router)
 app.include_router(predict.router)
+app.include_router(chat.router)
