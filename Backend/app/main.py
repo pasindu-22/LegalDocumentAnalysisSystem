@@ -4,7 +4,7 @@ from db import engine, get_session
 from routers import auth,documents,predict,chat,docAnalysis
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI(debug=True)
+app = FastAPI(debug=True,title="Legal-AI")
 
 app.add_middleware(
     CORSMiddleware,
