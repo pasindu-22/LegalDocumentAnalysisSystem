@@ -7,7 +7,7 @@ from unittest.mock import patch, MagicMock, AsyncMock
 from app.agents.extractor import (
     summarize_chunk, 
     extract_case_summary, 
-    process_pdf
+    process_raw_text
 )
 
 class TestExtractor:
@@ -63,19 +63,20 @@ class TestExtractor:
         assert result["facts"] == "Sample case facts"
         
     @pytest.mark.asyncio
-    @patch('app.agents.extractor.load_pdf_pages')
+    @patch('app.agents.extractor.Document')
     @patch('app.agents.extractor.text_splitter')
     @patch('app.agents.extractor.ChatGoogleGenerativeAI')
     @patch('app.agents.extractor.summarize_chunk')
     @patch('app.agents.extractor.extract_case_summary')
-    async def test_process_pdf(self, mock_extract_summary, mock_summarize, mock_llm, 
-                              mock_splitter, mock_load_pages):
+    async def test_process_raw_text(self, mock_extract_summary, mock_summarize, mock_llm, 
+                              mock_splitter, mock_document):
         # Setup mocks
-        mock_pages = [MagicMock()]
+        mock_document_instance = MagicMock()
+        mock_document.return_value = mock_document_instance
+        
         mock_chunks = [MagicMock()]
         mock_chunks[0].page_content = "Sample legal text"
         
-        mock_load_pages.return_value = mock_pages
         mock_splitter.split_documents.return_value = mock_chunks
         mock_summarize.return_value = "Summarized text"
         
@@ -89,12 +90,11 @@ class TestExtractor:
         mock_extract_summary.return_value = expected_result
         
         # Call the function
-        result = await process_pdf("sample_file.pdf")
+        result = await process_raw_text("Sample legal text content")
         
         # Verify results and interactions
         assert result == expected_result
-        mock_load_pages.assert_called_once_with("sample_file.pdf")
-        mock_splitter.split_documents.assert_called_once_with(mock_pages)
+        mock_document.assert_called_once_with(page_content="Sample legal text content")
+        mock_splitter.split_documents.assert_called_once()
         mock_summarize.assert_called_once()
         mock_extract_summary.assert_called_once_with("Summarized text", mock_llm.return_value)
-
