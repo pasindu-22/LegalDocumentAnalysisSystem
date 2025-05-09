@@ -133,5 +133,28 @@ export const theme = createTheme({
         },
       },
     },
+    MuiCssBaseline: {
+      styleOverrides: {
+        '*': {
+          scrollbarWidth: 'thin',  // For Firefox
+          scrollbarColor: '#2A2A2A #0F0F0F',  // For Firefox (thumb and track colors)
+          
+          '&::-webkit-scrollbar': {
+            width: '8px',
+            height: '8px',
+          },
+          '&::-webkit-scrollbar-track': {
+            background: '#0F0F0F',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: '#2A2A2A',
+            borderRadius: 6,
+            '&:hover': {
+              backgroundColor: '#3A3A3A',
+            },
+          },
+        },
+      },
+    },
   },
 });
