@@ -3,9 +3,10 @@ import os
 import json
 import time
 from dotenv import load_dotenv
+from services.llm_factory import llm
 load_dotenv()
 
-client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+client = llm
 
 def analyze_legal_text_with_llama(text, model="llama3-70b-8192"):
     if len(text.split()) > 1500:
