@@ -1,11 +1,8 @@
 import sys
-
-sys.path.append(r"C:\Users\raguk\LDAS\LegalDocumentAnalysisSystem\Backend")
-
 import os
 from dotenv import load_dotenv
 import asyncio
-from app.tools.retrieve import retrieve
+from tools.retrieve import retrieve
 from langchain.chat_models import init_chat_model
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
@@ -42,8 +39,7 @@ async def query_or_respond(messages:list):
       if usedRAG:
             prompt2 = f"""Based on the following context and conversation history, 
             please provide a relevant and contextual response. If the answer cannot 
-            be derived from the context, only use the conversation history or say 
-            "I cannot answer this based on the provided information."
+            be derived from the context, then use ur general knowledge
 
             Context from documents:
             {last_tool_message}
@@ -81,7 +77,7 @@ async def main():
 
     print(await query_or_respond(messages))
 
-asyncio.run(main())
+
             
     
       
