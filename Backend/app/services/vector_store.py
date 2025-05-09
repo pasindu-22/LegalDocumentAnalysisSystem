@@ -6,5 +6,5 @@ embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-mpnet-b
 vector_store = PGVector(
     embeddings=embeddings,
     collection_name="Legal_docs",
-    connection="postgresql+psycopg://postgres:<password>@localhost:5432/LDAS"
+    connection="postgresql+psycopg://postgres:Thinklife@localhost:5432/LDAS"
 )

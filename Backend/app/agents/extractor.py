@@ -6,7 +6,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
 from dotenv import load_dotenv
-from app.services.load_pdf import load_pdf_pages  # PDF page loader
+from services.load_pdf import load_pdf_pages  # PDF page loader
 
 load_dotenv()
 gemini_api_key = os.getenv("GEMINI_API_KEY")
