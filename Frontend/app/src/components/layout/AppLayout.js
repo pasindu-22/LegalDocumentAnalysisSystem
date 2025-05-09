@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { 
   Box, AppBar, Toolbar, IconButton, Typography, Drawer, List, 
   ListItem, ListItemIcon, ListItemText, Divider, Avatar,
-  useTheme, useMediaQuery
+  useTheme, useMediaQuery, 
 } from '@mui/material';
 import { 
   Menu as MenuIcon, Dashboard, Chat, Description, 
   Settings, ChevronLeft, Search, NotificationsOutlined,
-  AccountCircle, Logout
+  AccountCircle, Logout, EditNote,
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -28,6 +28,7 @@ const AppLayout = ({ children }) => {
     { text: 'Dashboard', icon: <Dashboard />, path: '/' },
     { text: 'Chat Assistant', icon: <Chat />, path: '/chat' },
     { text: 'Document Analysis', icon: <Description />, path: '/documents' },
+    { text: 'Draft Contract', icon: <EditNote />, path: '/drafts' },
     { text: 'Settings', icon: <Settings />, path: '/settings' },
   ];
 
