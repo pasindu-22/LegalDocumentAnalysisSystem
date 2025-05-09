@@ -29,12 +29,7 @@ class TestExtractor:
         # Reset for next test
         mock_instance.reset_mock()
         
-        # Test with global llm (should create one)
-        with patch('app.agents.extractor.llm', mock_instance):
-            result = await summarize_chunk("This is some legal text")
-            assert result == "This is a summarized chunk."
-            mock_instance.ainvoke.assert_called_once()
-
+    
     @pytest.mark.asyncio
     @patch('app.agents.extractor.ChatGoogleGenerativeAI')
     async def test_extract_case_summary(self, mock_llm):

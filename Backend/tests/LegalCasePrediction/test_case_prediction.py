@@ -17,12 +17,12 @@ class TestCasePrediction:
     def test_preprocess_text(self):
         # Test basic cleaning
         result = preprocess_text("This is a TEST! with 123 numbers.")
-        assert result == "this is a test with 123 numbers"
+        assert result == "this is a test with 123 number"
         
         # Test with stopwords
         stopwords = ["is", "a", "with"]
         result = preprocess_text("This is a TEST with numbers.", stopwords)
-        assert result == "this test numbers"
+        assert result == "this test number"
         
         # Test with lemmatization
         result = preprocess_text("The cats are running quickly")

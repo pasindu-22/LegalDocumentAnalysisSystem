@@ -11,8 +11,8 @@ from dotenv import load_dotenv
 import os
 import asyncio
 
-from agents.extractor import process_raw_text
-from services.load_pdf import load_pdf_pages
+from app.agents.extractor import process_raw_text
+from app.services.load_pdf import load_pdf_pages
 
 nltk.download('punkt')
 nltk.download('stopwords')
@@ -48,9 +48,9 @@ def setup_one_hot_encoders():
 
 def predict_from_raw_text(raw_text: str):
     try:
-        vectorizer = joblib.load("assets/vectorizer.pkl")
-        lda_model = joblib.load("assets/lda_model.pkl")
-        model = joblib.load("assets/case_prediction_model_1.pkl")
+        vectorizer = joblib.load("app/assets/vectorizer.pkl")
+        lda_model = joblib.load("app/assets/lda_model.pkl")
+        model = joblib.load("app/assets/case_prediction_model_1.pkl")
         dt_encoder, disp_encoder = setup_one_hot_encoders()
 
         features = asyncio.run(process_raw_text(raw_text))
