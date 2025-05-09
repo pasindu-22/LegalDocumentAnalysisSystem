@@ -6,6 +6,8 @@ from models.user import User
 from db import get_session
 from services.load_pdf2 import extract_text_from_upload, save_pdf_to_assets
 from datetime import datetime,timezone
+from utils.calculate_hash import calculate_hash
+from services.ethereum import add_document_to_blockchain
 
 router = APIRouter(prefix="/documents", tags=["Documents"])
 
@@ -23,6 +25,16 @@ def upload_and_extract_text(
     
     # Step 2: Save PDF to disk
     file_path = save_pdf_to_assets(file, user_id=str(user.id))
+    
+    # Step 3: Register on Ethereum blockchain
+    doc_hash = calculate_hash(content)
+    metadata = {
+        "user_id": str(user.id),
+        "file_name": file.filename,
+        "file_path": file_path,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }
+    eth_result = add_document_to_blockchain(doc_hash, metadata.dict())
 
     # Step 3: Save document to DB
     document = Document(
@@ -30,7 +42,8 @@ def upload_and_extract_text(
         title=file.filename,
         content=content,
         created_at=datetime.now(timezone.utc),
-        type="pdf"
+        type="pdf",
+        ethereum_tx=eth_result.get("tx_hash"),
     )
     db.add(document)
     db.commit()
