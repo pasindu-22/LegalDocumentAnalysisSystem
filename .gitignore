@@ -36,3 +36,8 @@ dist/
 
 # FastAPI/uvicorn logs
 *.uvicorn.log
+
+
+# Coverge reports
+.coverage
+htmlcov
