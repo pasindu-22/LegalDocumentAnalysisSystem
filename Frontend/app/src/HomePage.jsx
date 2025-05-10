@@ -36,7 +36,10 @@ const HomePage = ({ showNavbar = true }) => {
             analysis and extraction system.
           </p>
           <div className="cta-buttons">
-            <button className="primary-button" onClick={() => navigateTo("/login")}>
+            <button
+              className="primary-button"
+              onClick={() => navigateTo("/login")}
+            >
               Get Started
             </button>
             {/* <button className="secondary-button">Schedule Demo</button> */}
@@ -200,7 +203,7 @@ const HomePage = ({ showNavbar = true }) => {
   };
 
   return (
-    <div className={`homepage ${isTransitioning ? 'page-exit' : ''}`}>
+    <div className={`homepage ${isTransitioning ? "page-exit" : ""}`}>
       {/* {showNavbar && (
         <header className="header">
           <div className="logo">
