@@ -12,7 +12,7 @@ class Document(SQLModel, table=True):
     language: Optional[str] = "en"
     status: str = "uploaded"
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    ethereum_tx: Optional[str]
+    ethereum_tx: Optional[str] = None
 
     user: Optional["User"] = Relationship(back_populates="documents")
     predictions: List["CasePrediction"] = Relationship(back_populates="document")
