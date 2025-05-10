@@ -6,7 +6,6 @@ import os
 # Load environment variables
 load_dotenv()
 
-# Database URL from .env
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 # Create engine
@@ -19,9 +18,10 @@ def get_session():
 
 # Function to create DB tables
 def create_db_and_tables():
+    SQLModel.metadata.drop_all(engine) 
     SQLModel.metadata.create_all(engine)
 
 # Only create tables if script is run directly
 if __name__ == "__main__":
     create_db_and_tables()
-    print("✅ Tables created successfully.")
+    print("Tables created successfully.")
