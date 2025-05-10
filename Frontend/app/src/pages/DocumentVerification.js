@@ -20,10 +20,11 @@ const baseUrl = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000';
 const apiUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
 
 const API = {
-  UPLOAD: process.env.REACT_APP_API_URL + '/documents/upload-test',
-  VERIFY_FILE: process.env.REACT_APP_API_URL + '/verification/verify',
-  VERIFY_HASH: process.env.REACT_APP_API_URL + '/documents/verify-hash'
+  UPLOAD: apiUrl + '/documents/upload-test',
+  VERIFY_FILE: apiUrl + '/verification/verify',
+  VERIFY_HASH: apiUrl + '/documents/verify-hash'
 };
+
 
 /**
  * TabPanel component to handle tab content display
