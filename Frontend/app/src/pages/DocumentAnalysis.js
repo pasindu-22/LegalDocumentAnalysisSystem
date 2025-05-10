@@ -77,7 +77,7 @@ const DocumentAnalysis = () => {
       alignItems: "center",
       justifyContent: "center",
       padding: "60px",
-      backgroundColor: "rgba(255, 255, 255, 0.05)",
+      backgroundColor: "rgba(0, 0, 0)",
       backdropFilter: "blur(10px)",
       color: "#d0d4d8",
       border: "2px dashed #7f8c8d",
