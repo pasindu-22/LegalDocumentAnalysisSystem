@@ -29,43 +29,56 @@ export const AuthProvider = ({ children }) => {
   // Login function to authenticate user
   const login = async (username, password) => {
       try {
-      const params = new URLSearchParams();
-      params.append('username', username);
-      params.append('password', password);
+        const params = new URLSearchParams();
+        params.append('username', username);
+        params.append('password', password);
 
-      const response = await fetch(`${API_URL}/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: params.toString(),
-      });
+        const response = await fetch(`${API_URL}/auth/login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: params.toString(),
+        });
 
-      if (!response.ok) {
-        throw new Error('Login failed');
-      }
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.detail || 'Login failed');
+        }
 
-
-      const data = await response.json();
-      const { token: authToken, user: userData } = data;
-      
-      // Store token and user data in localStorage
-      localStorage.setItem('authToken', authToken);
-      localStorage.setItem('user', JSON.stringify(userData));
-      
-      // Update state
-      setToken(authToken);
-      setUser(userData);
-      setIsAuthenticated(true);
-      
-      return { success: true };
+        // Get response data
+        const data = await response.json();
+        
+        // Extract the access token from the actual response format
+        // { "access_token": "...", "token_type": "bearer" }
+        const authToken = data.access_token;
+        
+        if (!authToken) {
+          throw new Error('No token received from server');
+        }
+        
+        // For user data, since it's not in the response, you can:
+        // Option 1: Make a separate request to get user data
+        // Option 2: Store minimal user info (like username) for now
+        const userData = { username }; // Basic user data
+        
+        // Store token and user data in localStorage
+        localStorage.setItem('authToken', authToken);
+        localStorage.setItem('user', JSON.stringify(userData));
+        
+        // Update state
+        setToken(authToken);
+        setUser(userData);
+        setIsAuthenticated(true);
+        
+        return { success: true };
     } catch (error) {
       console.error('Login error:', error);
       return { 
         success: false, 
         error: error.message || 'Login failed. Please try again.' 
       };
-    }
+  }
   };
 
   // Logout function
