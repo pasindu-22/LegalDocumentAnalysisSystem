@@ -176,7 +176,7 @@ const Signup = () => {
               <Typography variant="body2">
                 Already have an account?{' '}
                 <MuiLink component={Link} to="/login" variant="body2">
-                  Sign in
+                  Login here
                 </MuiLink>
               </Typography>
             </Box>
