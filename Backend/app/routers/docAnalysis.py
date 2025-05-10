@@ -28,7 +28,7 @@ async def analyze_file(file: UploadFile = File(...)):
         content = await file.read()
         
         # Extract text from file
-        text = extract_text(content, extension)
+        text = extract_text(content, extension) 
         
         # Analyze text
         analysis_result = analyze_legal_text(text,nlp)

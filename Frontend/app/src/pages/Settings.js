@@ -6,7 +6,7 @@ import {
 
 const Settings = () => {
   const [settings, setSettings] = useState({
-    darkMode: false,
+    darkMode: true,
     notifications: true,
     autoSave: true,
     apiEndpoint: 'http://localhost:8000/api',
@@ -56,7 +56,8 @@ const Settings = () => {
                 control={
                   <Switch 
                     checked={settings.darkMode} 
-                    onChange={handleChange} 
+                    // onChange={handleChange} 
+                    disabled
                     name="darkMode" 
                   />
                 }

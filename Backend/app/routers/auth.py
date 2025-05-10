@@ -32,7 +32,7 @@ def register(registration_data: UserRegistration, db: Session = Depends(get_sess
         role="user"
     )
     db.add(user)
-    db.commit()
+    db.commit() 
     db.refresh(user)
     return {"msg": "User registered"}
 

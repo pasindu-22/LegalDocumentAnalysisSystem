@@ -8,6 +8,8 @@ import Dashboard from './pages/Dashboard';
 import ChatInterface from './pages/ChatInterface';
 import DocumentAnalysis from './pages/DocumentAnalysis';
 import Settings from './pages/Settings';
+import Login from './pages/Login';
+import Signin from './pages/Signin';
 
 // Layout Component
 import AppLayout from './components/layout/AppLayout';
@@ -21,18 +23,28 @@ function App() {
       <CssBaseline />
       <ChatContextProvider>
         <BrowserRouter>
-          <AppLayout>
-            <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/chat" element={<ChatInterface />} />
-              <Route path="/documents" element={<DocumentAnalysis />} />
-              <Route path="/settings" element={<Settings />} />
-            </Routes>
-          </AppLayout>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/signin" element={<Signin />} />
+            <Route
+              path="/*"
+              element={
+                <AppLayout>
+                  <Routes>
+                    <Route path="/" element={<Dashboard />} />
+                    <Route path="/chat" element={<ChatInterface />} />
+                    <Route path="/documents" element={<DocumentAnalysis />} />
+                    <Route path="/settings" element={<Settings />} />
+                  </Routes>
+                </AppLayout>
+              }
+            />
+          </Routes>
         </BrowserRouter>
       </ChatContextProvider>
     </ThemeProvider>
   );
 }
+
 
 export default App;
