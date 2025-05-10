@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { 
-  Box, Button, TextField, Typography, Paper, Avatar, Container,
-  Alert, CircularProgress, Link as MuiLink 
+  Box, Button, TextField, Typography, Paper, Avatar, Container, CircularProgress, Link as MuiLink 
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useNavigate, Link } from 'react-router-dom';
@@ -54,6 +53,18 @@ const Login = () => {
   };
 
   return (
+    <Box
+      sx={{
+        minHeight: '100vh',
+        backgroundImage: 'url("/legal1.jpg")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
     <Container component="main" maxWidth="xs"
       sx={{
         minHeight: '100vh',
@@ -125,6 +136,7 @@ const Login = () => {
         </Box>
       </Paper>
     </Container>
+  </Box>
   );
 };
 
