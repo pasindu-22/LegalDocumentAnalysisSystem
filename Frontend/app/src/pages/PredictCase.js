@@ -25,7 +25,12 @@ const PredictCase = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      const result = await response.json();
+        const result = await response.json();
+        if (result.error) { 
+            setData({ error: "Internal server error. Please try again." });
+            console.log("Error:", result.error);
+            return;
+        }
       setData(result);
     } catch (error) {
       console.error('Error during prediction:', error);
@@ -36,72 +41,76 @@ const PredictCase = () => {
   };
   
 
-  return (
+return (
     <Container maxWidth="md">
-      <Box mt={5}>
-        <Paper elevation={3} sx={{ padding: 4 }}>
-          <Typography variant="h4" gutterBottom>
-            Predict Legal Case Outcome
-          </Typography>
+        <Box mt={5}>
+            <Paper elevation={3} sx={{ padding: 4 }}>
+                <Typography variant="h4" gutterBottom>
+                    Predict Legal Case Outcome
+                </Typography>
 
-          <Divider sx={{ my: 2 }} />
+                <Typography variant="subtitle2" color="textSecondary" gutterBottom>
+                    Predict the result of your latest document
+                </Typography>
 
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handlePrediction}
-            disabled={loading}
-            sx={{
-              px: 4,
-              py: 1.5,
-              borderRadius: 2,
-              fontWeight: 'bold',
-              textTransform: 'none',
-              fontSize: '1rem',
-            }}
-          >
-            {loading ? <CircularProgress size={24} color="inherit" /> : 'Predict'}
-          </Button>
+                <Divider sx={{ my: 2 }} />
 
-          {data && (
-            <Box mt={4}>
-              {data.error ? (
-                <Alert severity="error">{data.error}</Alert>
-              ) : (
-                <Card variant="outlined">
-                  <CardContent>
-                    <Typography variant="h6" gutterBottom>
-                      Prediction:{" "}
-                      <strong style={{ color: data.prediction ? 'green' : 'red' }}>
-                        {data.prediction === 1 ? 'Positive' : 'Negative'}
-                      </strong>
-                    </Typography>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handlePrediction}
+                    disabled={loading}
+                    sx={{
+                        px: 4,
+                        py: 1.5,
+                        borderRadius: 2,
+                        fontWeight: 'bold',
+                        textTransform: 'none',
+                        fontSize: '1rem',
+                    }}
+                >
+                    {loading ? <CircularProgress size={24} color="inherit" /> : 'Predict'}
+                </Button>
 
-                    <Typography variant="subtitle1" gutterBottom>
-                      Confidence: {(Math.max(...data.probability) * 100).toFixed(2)}%
-                    </Typography>
+                {data && (
+                    <Box mt={4}>
+                        {data.error ? (
+                            <Alert severity="error">{data.error}</Alert>
+                        ) : (
+                            <Card variant="outlined">
+                                <CardContent>
+                                    <Typography variant="h6" gutterBottom>
+                                        Prediction:{" "}
+                                        <strong style={{ color: data.prediction ? 'green' : 'red' }}>
+                                            {data.prediction === 1 ? 'Positive' : 'Negative'}
+                                        </strong>
+                                    </Typography>
 
-                    <Divider sx={{ my: 2 }} />
+                                    <Typography variant="subtitle1" gutterBottom>
+                                        Confidence: {(Math.max(...data.probability) * 100).toFixed(2)}%
+                                    </Typography>
 
-                    <Typography variant="subtitle2" gutterBottom>
-                      Case Details:
-                    </Typography>
+                                    <Divider sx={{ my: 2 }} />
 
-                    <Stack spacing={1}>
-                      <Typography><strong>First Party:</strong> {data.features.first_party}</Typography>
-                      <Typography><strong>Second Party:</strong> {data.features.second_party}</Typography>
-                      <Typography><strong>Decision Type:</strong> {data.features.decision_type}</Typography>
-                      <Typography><strong>Disposition:</strong> {data.features.disposition}</Typography>
-                    </Stack>
-                  </CardContent>
-                </Card>
-              )}
-            </Box>
-          )}
-        </Paper>
-      </Box>
+                                    <Typography variant="subtitle2" gutterBottom>
+                                        Case Details:
+                                    </Typography>
+
+                                    <Stack spacing={1}>
+                                        <Typography><strong>First Party:</strong> {data.features.first_party}</Typography>
+                                        <Typography><strong>Second Party:</strong> {data.features.second_party}</Typography>
+                                        <Typography><strong>Decision Type:</strong> {data.features.decision_type}</Typography>
+                                        <Typography><strong>Disposition:</strong> {data.features.disposition}</Typography>
+                                    </Stack>
+                                </CardContent>
+                            </Card>
+                        )}
+                    </Box>
+                )}
+            </Paper>
+        </Box>
     </Container>
-  );
+);
 };
 
 export default PredictCase;
