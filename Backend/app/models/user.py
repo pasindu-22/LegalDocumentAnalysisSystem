@@ -1,6 +1,7 @@
-from models import SQLModel, Field, UUID, uuid4, List, Relationship, datetime,timezone
-
-
+from sqlmodel import SQLModel, Field, Relationship
+from typing import List
+from uuid import UUID, uuid4
+from datetime import datetime, timezone
 
 class User(SQLModel, table=True):
     id: UUID = Field(default_factory=uuid4, primary_key=True)

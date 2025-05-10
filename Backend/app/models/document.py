@@ -1,5 +1,7 @@
-from models import SQLModel, Field, UUID, uuid4, List, Relationship, datetime,timezone, Optional
-
+from sqlmodel import SQLModel, Field, Relationship
+from typing import Optional, List
+from uuid import UUID, uuid4
+from datetime import datetime, timezone
 
 class Document(SQLModel, table=True):
     id: UUID = Field(default_factory=uuid4, primary_key=True)
@@ -10,7 +12,7 @@ class Document(SQLModel, table=True):
     language: Optional[str] = "en"
     status: str = "uploaded"
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    ethereum_tx: Optional[str] = None
 
     user: Optional["User"] = Relationship(back_populates="documents")
-    embeddings: List["DocumentEmbedding"] = Relationship(back_populates="document")
     predictions: List["CasePrediction"] = Relationship(back_populates="document")

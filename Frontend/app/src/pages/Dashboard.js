@@ -128,7 +128,7 @@ const Dashboard = () => {
                   startIcon={<InsertDriveFile />}
                   sx={{ p: 1.5, height: '100%' }}
                 >
-                  Draft Contract
+                  Predict Case
                 </Button>
               </Grid>
               <Grid item xs={6} md={3}>
@@ -159,9 +159,7 @@ const Dashboard = () => {
             
             <Stack spacing={2}>
               {[
-                { name: 'Employment Contract.pdf', progress: 100, time: '2 hours ago' },
-                { name: 'Privacy Policy.docx', progress: 100, time: '4 hours ago'  },
-                { name: 'Terms of Service.pdf', progress: 60, time: '30 minutes ago'  },
+                
               ].map((doc, index) => (
                 <Card 
                   key={index} 
@@ -234,7 +232,7 @@ const Dashboard = () => {
             <Box sx={{ 
               p: 3, 
               bgcolor: 'background.subtle', 
-              borderRadius: theme.shape.borderRadius,
+              borderRadius: 4,
               mb: 4
             }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
