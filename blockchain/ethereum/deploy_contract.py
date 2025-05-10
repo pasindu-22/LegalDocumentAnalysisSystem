@@ -7,8 +7,10 @@ set_solc_version("0.8.0")
 
 # Connect to Ganache
 w3 = Web3(Web3.HTTPProvider('http://127.0.0.1:8545'))
-w3.eth.default_account = w3.eth.accounts[5]
-
+account = w3.eth.accounts[9] 
+balance = w3.eth.get_balance(account)
+print("Account:", account)
+print("Balance (ETH):", w3.from_wei(balance, 'ether'))
 # Load and compile Solidity
 with open("contracts/DocumentVerification.sol") as f:
     contract_source = f.read()
@@ -17,7 +19,11 @@ contract_id, contract_interface = compiled_sol.popitem()
 
 # Deploy contract
 DocumentVerification = w3.eth.contract(abi=contract_interface['abi'], bytecode=contract_interface['bin'])
-tx_hash = DocumentVerification.constructor().transact()
+tx_hash = DocumentVerification.constructor().transact({
+    "from": account,
+    "gas": 3000000,
+    "gasPrice": w3.to_wei("2", "gwei")  # Matches Ganache default
+})
 tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
 
 print("Contract deployed at:", tx_receipt.contractAddress)

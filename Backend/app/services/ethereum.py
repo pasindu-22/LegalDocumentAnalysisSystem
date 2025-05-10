@@ -8,14 +8,21 @@ load_dotenv()
 # Ethereum settings
 ETHEREUM_NODE_URL = os.getenv("ETHEREUM_NODE_URL")
 CONTRACT_ADDRESS = os.getenv("CONTRACT_ADDRESS")
+CONTRACT_ADDRESS=Web3.to_checksum_address(CONTRACT_ADDRESS)
 
+contract_json_path = os.path.join("..", "..", "blockchain", "ethereum", "contract_address.json")
+#when running this from app as root directory. so that it gives the relative address to app
 # Load contract ABI
 try:
-    with open("/home/chamoda/legal-document-verification/blockchain/ethereum/contract_address.json") as f:
+    with open(os.path.join(contract_json_path)) as f:
         contract_json = json.load(f)
         CONTRACT_ABI = contract_json["abi"]
-except:
-    # Fallback ABI for demo purposes
+        print("contract address "+CONTRACT_ADDRESS )
+        print(CONTRACT_ABI)
+        print("got these")
+except Exception as e:
+    # Fallback ABI for demo purpose
+    print("didnt get"+str(e))
     CONTRACT_ABI = [
         {
             "inputs": [{"internalType": "bytes32", "name": "documentHash", "type": "bytes32"}, {"internalType": "string", "name": "metadata", "type": "string"}],
@@ -38,7 +45,7 @@ def connect_to_ethereum():
     try:
         # Connect to Ethereum node
         w3 = Web3(Web3.HTTPProvider(ETHEREUM_NODE_URL))
-        
+        print("connecting to web3")
         # Check if connected
         if not w3.is_connected():
             print("Warning: Not connected to Ethereum node")
@@ -46,7 +53,9 @@ def connect_to_ethereum():
             
         # Load contract
         if CONTRACT_ADDRESS:
+            print("CONTRACT")
             contract = w3.eth.contract(address=CONTRACT_ADDRESS, abi=CONTRACT_ABI)
+            print(contract)
             return w3, contract
         else:
             print("Warning: No contract address provided")

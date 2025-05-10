@@ -26,7 +26,7 @@ def register(registration_data: UserRegistration, db: Session = Depends(get_sess
         raise HTTPException(status_code=400, detail="Email already registered")
 
     user = User(
-        full_name=registration_data.username,
+        username=registration_data.username,
         email=registration_data.email,
         password_hash=hash_password(registration_data.password),
         role="user"

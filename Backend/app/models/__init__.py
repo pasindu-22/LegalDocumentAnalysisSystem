@@ -8,4 +8,4 @@ from .user import User
 from .document import Document
 from .case_predictions import CasePrediction
 from .chat_query import ChatQuery
-from .embedding import DocumentEmbedding
+

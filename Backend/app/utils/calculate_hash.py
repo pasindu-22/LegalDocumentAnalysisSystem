@@ -1,7 +1,7 @@
 import hashlib
 
-def calculate_hash(content):
-    """Calculate SHA-256 hash of file content"""
-    if isinstance(content, bytes):
-        return hashlib.sha256(content).hexdigest()
-    return hashlib.sha256(content.encode()).hexdigest()
+def calculate_hash(content: bytes) -> str:
+    """Calculate SHA-256 hash of file content (expects bytes)"""
+    if not isinstance(content, bytes):
+        raise TypeError("Content must be bytes.")
+    return hashlib.sha256(content).hexdigest()
