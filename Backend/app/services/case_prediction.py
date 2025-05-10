@@ -11,8 +11,8 @@ from dotenv import load_dotenv
 import os
 import asyncio
 
-from app.agents.extractor import process_raw_text
-from app.services.load_pdf import load_pdf_pages
+from agents.extractor import process_raw_text
+from services.load_pdf import load_pdf_pages
 
 nltk.download('punkt')
 nltk.download('stopwords')
