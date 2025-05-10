@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import { theme } from './theme';
 
@@ -13,35 +13,48 @@ import Signin from './pages/Signin';
 
 // Layout Component
 import AppLayout from './components/layout/AppLayout';
+import ProtectedRoute from './components/ProtectedRoute';
 
 // Context
 import { ChatContextProvider } from './context/ChatContext';
+import { AuthProvider } from './context/AuthContext';
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <ChatContextProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/signin" element={<Signin />} />
-            <Route
-              path="/*"
-              element={
-                <AppLayout>
-                  <Routes>
-                    <Route path="/" element={<Dashboard />} />
-                    <Route path="/chat" element={<ChatInterface />} />
-                    <Route path="/documents" element={<DocumentAnalysis />} />
-                    <Route path="/settings" element={<Settings />} />
-                  </Routes>
-                </AppLayout>
-              }
-            />
-          </Routes>
-        </BrowserRouter>
-      </ChatContextProvider>
+      <AuthProvider>
+        <ChatContextProvider>
+          <BrowserRouter>
+            <Routes>
+
+              {/* Public routes */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/signin" element={<Signin />} />
+
+              {/* Protected routes */}
+              <Route element={<ProtectedRoute />}>
+                <Route
+                  path="/*"
+                  element={
+                    <AppLayout>
+                      <Routes>
+                        <Route path="/" element={<Dashboard />} />
+                        <Route path="/chat" element={<ChatInterface />} />
+                        <Route path="/documents" element={<DocumentAnalysis />} />
+                        <Route path="/settings" element={<Settings />} />
+                      </Routes>
+                    </AppLayout>
+                  }
+                />
+              </Route>
+              
+              {/* Redirect to login as default route */}
+              <Route path="*" element={<Navigate to="/login" replace />} />
+            </Routes>
+          </BrowserRouter>
+        </ChatContextProvider>
+      </AuthProvider>
     </ThemeProvider>
   );
 }

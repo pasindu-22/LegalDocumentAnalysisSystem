@@ -1,22 +1,55 @@
 import React, { useState } from 'react';
 import { 
-  Box, Button, TextField, Typography, Paper, Avatar, Container 
+  Box, Button, TextField, Typography, Paper, Avatar, Container,
+  Alert, CircularProgress, Link as MuiLink 
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login, isAuthenticated } = useAuth();
   const [form, setForm] = useState({ username: '', password: '' });
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  // Redirect if already authenticated
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/');
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    // Clear error when user starts typing
+    if (error) setError('');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (form.username && form.password) {
-      navigate('/');
+    
+    if (!form.username || !form.password) {
+      setError('Username and password are required');
+      return;
+    }
+
+    setLoading(true);
+    
+    try {
+      const result = await login(form.username, form.password);
+      
+      if (!result.success) {
+        setError(result.error || 'Login failed. Please try again.');
+        setLoading(false);
+        return;
+      }
+      
+      // Auth context will handle redirecting in its useEffect
+    } catch (err) {
+      setError('An unexpected error occurred. Please try again.');
+      setLoading(false);
     }
   };
 
@@ -57,6 +90,7 @@ const Login = () => {
             autoFocus
             value={form.username}
             onChange={handleChange}
+            disabled={loading}
           />
           <TextField
             margin="normal"
@@ -68,15 +102,26 @@ const Login = () => {
             autoComplete="current-password"
             value={form.password}
             onChange={handleChange}
+            disabled={loading}
           />
           <Button
             type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, py: 1 }}
+            disabled={loading}
           >
-            Sign In
+            {loading ? <CircularProgress size={24} /> : 'Sign In'}
           </Button>
+
+          <Box sx={{ mt: 2, textAlign: 'center' }}>
+            <Typography variant="body2">
+              Don't have an account?{' '}
+              <MuiLink component={Link} to="/signin" variant="body2">
+                Sign up
+              </MuiLink>
+            </Typography>
+          </Box>
         </Box>
       </Paper>
     </Container>

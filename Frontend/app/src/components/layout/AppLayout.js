@@ -10,6 +10,7 @@ import {
   AccountCircle, Logout, EditNote,
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const DRAWER_WIDTH = 240;
 
@@ -19,9 +20,15 @@ const AppLayout = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [open, setOpen] = useState(!isMobile);
+  const { logout, user } = useAuth();
 
   const handleDrawerToggle = () => {
     setOpen(!open);
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
   };
 
   const menuItems = [
@@ -136,6 +143,7 @@ const AppLayout = ({ children }) => {
                   mb: 0.5,
                   px: 2,
                   py: 1.5,
+                  cursor: 'pointer',
                   '&.Mui-selected': {
                     backgroundColor: 'background.subtle',
                     borderRadius: theme.shape.borderRadius,
@@ -172,11 +180,14 @@ const AppLayout = ({ children }) => {
 
         <Box sx={{ flexGrow: 1 }} />
         
+        { /* Logout section */}
         <Divider sx={{ borderColor: 'background.subtle' }} />
         <Box sx={{ p: 2 }}>
           <ListItem 
             button
+            onClick={handleLogout}
             sx={{
+              cursor: 'pointer',
               borderRadius: theme.shape.borderRadius,
               '&:hover': {
                 backgroundColor: 'rgba(244, 67, 54, 0.08)'

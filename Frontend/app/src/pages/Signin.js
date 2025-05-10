@@ -7,32 +7,67 @@ import {
   Paper,
   Avatar,
   Container,
+  Alert,
+  CircularProgress,
+  Link as MuiLink
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Signup = () => {
   const navigate = useNavigate();
+  const { register } = useAuth();
   const [form, setForm] = useState({
     username: '',
     email: '',
     password: '',
     confirmPassword: '',
   });
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    // Clear error when user starts typing
+    if (error) setError('');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (
-      form.username &&
-      form.email &&
-      form.password &&
-      form.password === form.confirmPassword
-    ) {
+    
+    // Form validation
+    if (!form.username || !form.email || !form.password || !form.confirmPassword) {
+      setError('All fields are required');
+      return;
+    }
+    
+    if (form.password !== form.confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+    
+    setLoading(true);
+    
+    try {
+      const result = await register({
+        username: form.username,
+        email: form.email,
+        password: form.password,
+        confirm_password: form.confirmPassword
+      });
+      
+      if (!result.success) {
+        setError(result.error || 'Registration failed. Please try again.');
+        setLoading(false);
+        return;
+      }
+      
+      // Redirect to login after successful registration
       navigate('/login');
+    } catch (err) {
+      setError('An unexpected error occurred. Please try again.');
+      setLoading(false);
     }
   };
 
@@ -71,6 +106,13 @@ const Signup = () => {
           >
             Legal Document Analysis System - Sign Up
           </Typography>
+
+          {error && (
+            <Alert severity="error" sx={{ width: '100%', mb: 2 }}>
+              {error}
+            </Alert>
+          )}
+
           <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
             <TextField
               margin="normal"
@@ -82,6 +124,7 @@ const Signup = () => {
               autoFocus
               value={form.username}
               onChange={handleChange}
+              disabled={loading}
             />
             <TextField
               margin="normal"
@@ -93,6 +136,7 @@ const Signup = () => {
               autoComplete="email"
               value={form.email}
               onChange={handleChange}
+              disabled={loading}
             />
             <TextField
               margin="normal"
@@ -104,6 +148,7 @@ const Signup = () => {
               autoComplete="new-password"
               value={form.password}
               onChange={handleChange}
+              disabled={loading}
             />
             <TextField
               margin="normal"
@@ -115,15 +160,26 @@ const Signup = () => {
               autoComplete="new-password"
               value={form.confirmPassword}
               onChange={handleChange}
+              disabled={loading}
             />
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, py: 1 }}
+              disabled={loading}
             >
-              Register
+              {loading ? <CircularProgress size={24} /> : 'Register'}
             </Button>
+
+            <Box sx={{ mt: 2, textAlign: 'center' }}>
+              <Typography variant="body2">
+                Already have an account?{' '}
+                <MuiLink component={Link} to="/login" variant="body2">
+                  Sign in
+                </MuiLink>
+              </Typography>
+            </Box>
           </Box>
         </Paper>
       </Container>
