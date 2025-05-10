@@ -18,6 +18,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 // Context
 import { ChatContextProvider } from './context/ChatContext';
 import { AuthProvider } from './context/AuthContext';
+import DocumentVerification from './pages/DocumentVerification';
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
                         <Route path="/" element={<Dashboard />} />
                         <Route path="/chat" element={<ChatInterface />} />
                         <Route path="/documents" element={<DocumentAnalysis />} />
+                        <Route path="/verification" element={<DocumentVerification />} />
                         <Route path="/settings" element={<Settings />} />
                       </Routes>
                     </AppLayout>

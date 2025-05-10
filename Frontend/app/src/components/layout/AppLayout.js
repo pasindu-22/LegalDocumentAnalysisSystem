@@ -35,7 +35,8 @@ const AppLayout = ({ children }) => {
     { text: 'Dashboard', icon: <Dashboard />, path: '/' },
     { text: 'Chat Assistant', icon: <Chat />, path: '/chat' },
     { text: 'Document Analysis', icon: <Description />, path: '/documents' },
-    { text: 'Draft Contract', icon: <EditNote />, path: '/drafts' },
+    { text: 'Predict Case', icon: <EditNote />, path: '/predict-case' },
+    { text: 'Document Verification', icon: <Description />, path: '/verification' },
     { text: 'Settings', icon: <Settings />, path: '/settings' },
   ];
 
