@@ -122,7 +122,7 @@ const Login = () => {
             sx={{ mt: 3, py: 1 }}
             disabled={loading}
           >
-            {loading ? <CircularProgress size={24} /> : 'Sign In'}
+            {loading ? <CircularProgress size={24} /> : 'Login'}
           </Button>
 
           <Box sx={{ mt: 2, textAlign: 'center' }}>
