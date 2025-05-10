@@ -10,13 +10,13 @@ const DocumentAnalysis = () => {
 
   // CSS Styles
   const styles = {
-    app: {
-      fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
-      color: "#333",
-      maxWidth: "1200px",
-      margin: "0 auto",
-      padding: "20px",
-    },
+   app: {
+  backgroundColor: "#1a1a1a", // deep charcoal gray
+  color: "#e5e7eb",           // light gray text
+  fontFamily: "'Segoe UI', 'Roboto', sans-serif",
+  minHeight: "100vh",
+  padding: "20px",
+},
     header: {
       textAlign: "center",
       marginBottom: "2rem",
@@ -31,12 +31,13 @@ const DocumentAnalysis = () => {
       color: "#95a5a6",
       margin: 0,
     },
-    main: {
-      backgroundColor: "#fff",
-      borderRadius: "8px",
-      boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-      overflow: "hidden",
-    },
+   main: {
+  backgroundColor: "#1f1f1f",        // dark base
+  borderRadius: "12px",
+  boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3)",
+  overflow: "hidden",
+  border: "1px solid #2a2a2a",
+},
     tabContainer: {
       display: "flex",
       borderBottom: "1px solid #e0e0e0",
@@ -100,11 +101,13 @@ const DocumentAnalysis = () => {
     textInput: {
       width: "100%",
       padding: "15px",
-      border: "1px solid #ddd",
       borderRadius: "5px",
       fontSize: "1rem",
       fontFamily: "inherit",
       resize: "vertical",
+      backgroundColor: "#121212",
+  color: "#e5e7eb",
+  border: "1px solid #2f2f2f",
     },
     analyzeButton: {
       backgroundColor: "#3f51b5",
