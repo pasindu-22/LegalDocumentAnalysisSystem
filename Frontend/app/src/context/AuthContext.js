@@ -3,6 +3,8 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
+// Get the API URL from environment variables
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -31,7 +33,7 @@ export const AuthProvider = ({ children }) => {
       params.append('username', username);
       params.append('password', password);
 
-      const response = await fetch('http://127.0.0.1:8000/auth/login', {
+      const response = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -79,7 +81,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       // Replace with your actual API endpoint
-      const response = await fetch('http://127.0.0.1:8000/auth/register', {
+      const response = await fetch(`${API_URL}/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
