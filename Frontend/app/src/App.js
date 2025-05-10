@@ -19,6 +19,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { ChatContextProvider } from './context/ChatContext';
 import { AuthProvider } from './context/AuthContext';
 import DocumentVerification from './pages/DocumentVerification';
+import PredictCase from './pages/PredictCase';
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
                         <Route path="/chat" element={<ChatInterface />} />
                         <Route path="/documents" element={<DocumentAnalysis />} />
                         <Route path="/verification" element={<DocumentVerification />} />
+                        <Route path="/predict-case" element={ <PredictCase />} />
                         <Route path="/settings" element={<Settings />} />
                       </Routes>
                     </AppLayout>
