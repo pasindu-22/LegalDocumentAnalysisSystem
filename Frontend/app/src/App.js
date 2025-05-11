@@ -10,6 +10,7 @@ import DocumentAnalysis from './pages/DocumentAnalysis';
 import Settings from './pages/Settings';
 import Login from './pages/Login';
 import Signin from './pages/Signin';
+import HomePage from './HomePage';
 
 // Layout Component
 import AppLayout from './components/layout/AppLayout';
@@ -33,6 +34,7 @@ function App() {
               {/* Public routes */}
               <Route path="/login" element={<Login />} />
               <Route path="/signin" element={<Signin />} />
+              <Route path="/home" element={<HomePage />} />
 
               {/* Protected routes */}
               <Route element={<ProtectedRoute />}>

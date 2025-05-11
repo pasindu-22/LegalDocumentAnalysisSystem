@@ -1,0 +1,12 @@
+SAMPLE LEGAL AGREEMENT
+
+This Agreement is made between:
+Party A ("Client") and Party B ("Vendor").
+
+1. CONFIDENTIALITY
+Both parties agree to keep all sensitive information confidential.
+
+2. TERM
+This agreement is valid from 2024-01-01 to 2025-12-31.
+
+END OF DOCUMENT
