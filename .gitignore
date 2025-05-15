@@ -45,3 +45,6 @@ ganache-db/
 # Coverge reports
 .coverage
 htmlcov
+
+
+uploads
