@@ -2,17 +2,34 @@ import React, { useState, useRef, useEffect } from 'react';
 import { 
   Box, Typography, Paper, TextField, IconButton, 
   Divider, Button, CircularProgress, Card, Stack, Chip,
-  Avatar, useTheme
+  Avatar, useTheme, List, ListItem, ListItemText, ListItemAvatar,
+  Drawer, ListItemButton, Tooltip, Dialog, DialogActions, DialogContent,
+  DialogContentText, DialogTitle
 } from '@mui/material';
-import { Send, Mic, MicOff, AttachFile, Person, SmartToy } from '@mui/icons-material';
+import { 
+  Send, Mic, MicOff, AttachFile, Person, SmartToy, 
+  History, Menu, Delete, Refresh, Close, ChatBubble
+} from '@mui/icons-material';
 import { useChatContext } from '../context/ChatContext';
 
 const ChatInterface = () => {
   const theme = useTheme();
-  const { messages, isLoading, sendMessage } = useChatContext();
+  const { 
+    messages, 
+    isLoading, 
+    sendMessage, 
+    clearChat, 
+    chatHistory,
+    isFetchingHistory,
+    loadChatById
+  } = useChatContext();
+  
   const [input, setInput] = useState('');
   const [isRecording, setIsRecording] = useState(false);
   const [file, setFile] = useState(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [confirmClearOpen, setConfirmClearOpen] = useState(false);
+  
   const fileInputRef = useRef(null);
   const messagesEndRef = useRef(null);
 
@@ -49,10 +66,35 @@ const ChatInterface = () => {
     }
   };
 
+  const handleLoadChat = (chatId) => {
+    loadChatById(chatId);
+    setDrawerOpen(false);
+  };
+
+  const toggleDrawer = () => {
+    setDrawerOpen(!drawerOpen);
+  };
+
+  const handleClearConfirm = () => {
+    clearChat();
+    setConfirmClearOpen(false);
+  };
+  
   // Auto scroll to bottom when new messages arrive
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  // Format the timestamp for display
+  const formatTimestamp = (timestamp) => {
+    const date = new Date(timestamp);
+    return date.toLocaleString();
+  };
+
+  // Truncate text for preview
+  const truncateText = (text, maxLength = 50) => {
+    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+  };
 
   // Suggested queries
   const suggestions = [
@@ -65,9 +107,29 @@ const ChatInterface = () => {
 
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <Typography variant="h4" component="h1" gutterBottom sx={{ mb: 3 }}>
-        Legal Assistant
-      </Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+        <Typography variant="h4" component="h1">
+          Legal Assistant
+        </Typography>
+        
+        <Box>
+          <Tooltip title="Chat History">
+            <IconButton onClick={toggleDrawer} color="primary">
+              <History />
+            </IconButton>
+          </Tooltip>
+          
+          <Tooltip title="Clear Current Chat">
+            <IconButton 
+              onClick={() => setConfirmClearOpen(true)}
+              color="primary"
+              disabled={messages.length === 0}
+            >
+              <Delete />
+            </IconButton>
+          </Tooltip>
+        </Box>
+      </Box>
       
       <Paper 
         elevation={0} 
@@ -192,7 +254,7 @@ const ChatInterface = () => {
                     borderColor: msg.isUser ? 'transparent' : 'background.subtle',
                   }}
                 >
-                  <Typography variant="body1" sx={{ lineHeight: 1.6 }}>
+                  <Typography variant="body1" sx={{ lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>
                     {msg.text}
                   </Typography>
                   <Typography variant="caption" sx={{ 
@@ -395,6 +457,86 @@ const ChatInterface = () => {
           </IconButton>
         </Box>
       </Paper>
+
+      {/* Chat History Drawer */}
+      <Drawer
+        anchor="right"
+        open={drawerOpen}
+        onClose={toggleDrawer}
+        sx={{ 
+          '& .MuiDrawer-paper': { 
+            width: { xs: '100%', sm: 350 },
+            padding: 2
+          } 
+        }}
+      >
+        <Box sx={{ p: 2 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+            <Typography variant="h6">Chat History</Typography>
+            <IconButton onClick={toggleDrawer}>
+              <Close />
+            </IconButton>
+          </Box>
+          
+          <Divider sx={{ mb: 2 }} />
+          
+          {isFetchingHistory ? (
+            <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
+              <CircularProgress size={30} />
+            </Box>
+          ) : chatHistory.length === 0 ? (
+            <Box sx={{ p: 2, textAlign: 'center' }}>
+              <Typography color="text.secondary">No chat history found</Typography>
+            </Box>
+          ) : (
+            <List>
+              {chatHistory.map((chat) => (
+                <ListItem 
+                  key={chat.id} 
+                  disablePadding 
+                  sx={{ mb: 1 }}
+                >
+                  <ListItemButton 
+                    onClick={() => handleLoadChat(chat.id)}
+                    sx={{ 
+                      borderRadius: 2,
+                      '&:hover': { bgcolor: 'background.subtle' }
+                    }}
+                  >
+                    <ListItemAvatar>
+                      <Avatar sx={{ bgcolor: 'primary.dark' }}>
+                        <ChatBubble />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText 
+                      primary={truncateText(chat.question, 30)}
+                      secondary={formatTimestamp(chat.timestamp)}
+                      primaryTypographyProps={{ fontWeight: 500 }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          )}
+        </Box>
+      </Drawer>
+
+      {/* Confirm Clear Dialog */}
+      <Dialog
+        open={confirmClearOpen}
+        onClose={() => setConfirmClearOpen(false)}
+      >
+        <DialogTitle>Clear current chat?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            This will clear the current conversation. This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setConfirmClearOpen(false)}>Cancel</Button>
+          <Button onClick={handleClearConfirm} color="error">Clear</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
