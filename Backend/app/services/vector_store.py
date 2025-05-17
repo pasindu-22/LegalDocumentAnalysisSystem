@@ -6,6 +6,7 @@ import os
 load_dotenv()
 
 DATABASE_URL=os.getenv("DATABASE_URL")
+import os
 
 embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2")
 

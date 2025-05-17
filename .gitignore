@@ -39,3 +39,12 @@ dist/
 
 # Ignore Ganache DB folder
 ganache-db/
+
+
+
+# Coverge reports
+.coverage
+htmlcov
+
+
+uploads
