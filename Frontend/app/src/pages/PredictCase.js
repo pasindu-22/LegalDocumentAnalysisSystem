@@ -87,7 +87,10 @@ return (
                                     </Typography>
 
                                     <Typography variant="subtitle1" gutterBottom>
-                                        Confidence: {(Math.max(...data.probability) * 100).toFixed(2)}%
+                                        Confidence:{" "}
+                                        {Array.isArray(data.probability)
+                                            ? (Math.max(...data.probability) * 100).toFixed(2) + "%"
+                                            : "N/A"}
                                     </Typography>
 
                                     <Divider sx={{ my: 2 }} />
@@ -97,10 +100,16 @@ return (
                                     </Typography>
 
                                     <Stack spacing={1}>
-                                        <Typography><strong>First Party:</strong> {data.features.first_party}</Typography>
-                                        <Typography><strong>Second Party:</strong> {data.features.second_party}</Typography>
-                                        <Typography><strong>Decision Type:</strong> {data.features.decision_type}</Typography>
-                                        <Typography><strong>Disposition:</strong> {data.features.disposition}</Typography>
+                                        {data.features ? (
+                                            <>
+                                                <Typography><strong>First Party:</strong> {data.features.first_party}</Typography>
+                                                <Typography><strong>Second Party:</strong> {data.features.second_party}</Typography>
+                                                <Typography><strong>Decision Type:</strong> {data.features.decision_type}</Typography>
+                                                <Typography><strong>Disposition:</strong> {data.features.disposition}</Typography>
+                                            </>
+                                        ) : (
+                                            <Typography color="text.secondary">No case details available.</Typography>
+                                        )}
                                     </Stack>
                                 </CardContent>
                             </Card>
