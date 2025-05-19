@@ -6,13 +6,21 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(debug=True,title="Legal-AI")
 
+origins = [
+    "http://localhost:5173",  # Vite default
+    "http://127.0.0.1:5173",
+    "http://127.0.0.1:8000"
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, specify your frontend domain
+    allow_origins=origins,  # In production, specify your frontend domain
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
 
 # @app.get("/test-db")
 # def test_db_connection(session: Session = Depends(get_session)):
