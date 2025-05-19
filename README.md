@@ -1,5 +1,14 @@
 # LegalDocumentAnalysisSystem
 
+# Make sure you have installed "ffmpeg" and added the path of the bin folder to your system enviroment variables
+
+If you don't have ffmpeg
+
+```cmd
+sudo apt install ffmpeg -y
+ffmpeg -version
+```
+
 to run back end
 
 # Backend Quick Start (Windows)
@@ -29,7 +38,7 @@ This guide provides the basic steps to run the backend on your local Windows mac
 
 3.  **Install Dependencies:**
     ```cmd
-    pip install -r requirements.txt
+    pip install -r requirements3.txt
     ```
 
 4.  **Environment Variables:**
