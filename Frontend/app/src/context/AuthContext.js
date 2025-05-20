@@ -4,7 +4,7 @@ const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
 // Get the API URL from environment variables
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const API_URL = process.env.REACT_APP_API_URL || 'http://89.116.122.39:8000';
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

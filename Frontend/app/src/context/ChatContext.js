@@ -5,7 +5,7 @@ const ChatContext = createContext();
 export const useChatContext = () => useContext(ChatContext);
 
 export const ChatContextProvider = ({ children }) => {
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+  const API_URL = process.env.REACT_APP_API_URL || 'http://89.116.122.39:8000';
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);

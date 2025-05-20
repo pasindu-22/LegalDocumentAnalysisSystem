@@ -24,7 +24,7 @@ const PredictCase = () => {
   const [predictionData, setPredictionData] = useState(null);
   
   // API configuration
-  const baseUrl = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000';
+  const baseUrl = process.env.REACT_APP_API_URL || 'http://89.116.122.39:8000';
   const apiUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
   const uploadUrl = apiUrl + '/documents/upload-test';
   const predictUrl = apiUrl + '/documents/predict-case';

@@ -24,7 +24,7 @@ const Settings = () => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/auth/me', {
+        const response = await fetch('http://89.116.122.39:8000/auth/me', {
           headers: {
             'Authorization': `Bearer ${token}`
           }

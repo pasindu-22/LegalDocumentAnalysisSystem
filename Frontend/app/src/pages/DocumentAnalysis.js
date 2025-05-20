@@ -261,7 +261,7 @@ const DocumentAnalysis = () => {
     formData.append("file", file);
 
     try {
-      const response = await fetch("http://localhost:8000/analyze/file/", {
+      const response = await fetch("http://89.116.122.39:8000/analyze/file/", {
         method: "POST",
         body: formData,
       });

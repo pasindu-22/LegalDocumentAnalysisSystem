@@ -15,7 +15,7 @@ import { useAuth } from '../context/AuthContext';
  * Modify these endpoints to match your backend API
  */
 
-const baseUrl = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000';
+const baseUrl = process.env.REACT_APP_API_URL || 'http://127.0.http://89.116.122.39:8000';
 // Remove trailing slash if present
 const apiUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
 
