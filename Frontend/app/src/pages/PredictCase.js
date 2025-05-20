@@ -1,8 +1,7 @@
 import { useAuth } from '../context/AuthContext';
 import {
   Container, Typography, Box, Paper, Button, Divider,
-   Alert, CircularProgress, Stack, Card, CardContent,
-  useTheme
+   Alert, CircularProgress, Stack, Card, CardContent
 } from '@mui/material';
 import { useState } from 'react';
 
