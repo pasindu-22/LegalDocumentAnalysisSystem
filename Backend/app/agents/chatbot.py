@@ -2,7 +2,7 @@ import sys
 import os
 from dotenv import load_dotenv
 import asyncio
-from app.tools.retrieve import retrieve
+from tools.retrieve import retrieve
 from langchain.chat_models import init_chat_model
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
@@ -15,7 +15,7 @@ async def query_or_respond(messages: list):
     # Original one was llm_with_tools = llm.bind_tools([retrieve]) then it changes to
     # llm_with_tools = await llm.bind_tools([retrieve])
 
-    llm_with_tools = await llm.bind_tools([retrieve])
+    llm_with_tools = llm.bind_tools([retrieve])
     response = await llm_with_tools.ainvoke(messages)
     try:
         tool_call = response.tool_calls[0]

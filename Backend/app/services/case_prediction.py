@@ -58,9 +58,9 @@ def predict_from_raw_text(raw_text: str):
     try:
         ensure_nltk_resources()
 
-        vectorizer = joblib.load("app/assets/ml_models/vectorizer.pkl")
-        lda_model = joblib.load("app/assets/ml_models/lda_model.pkl")
-        model = joblib.load("app/assets/ml_models/case_prediction_model.pkl")
+        vectorizer = joblib.load("assets/ml_models/vectorizer.pkl")
+        lda_model = joblib.load("assets/ml_models/lda_model.pkl")
+        model = joblib.load("assets/ml_models/case_prediction_model.pkl")
         dt_encoder, disp_encoder = setup_one_hot_encoders()
 
         features = asyncio.run(process_raw_text(raw_text))
