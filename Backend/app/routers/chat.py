@@ -44,22 +44,7 @@ async def transcribe(file: UploadFile = File(...)):
     result = model.transcribe(tmp_path)
     transcribed_text = result["text"]
     print("FFMPEG exists:", shutil.which("ffmpeg"))
-
-    # Automatically send transcribed text to /ask
-    async with httpx.AsyncClient() as client:
-        try:
-            response = await client.post(
-                "http://127.0.0.1:8000/chat/ask",
-                json={"question": transcribed_text}
-            )
-            response.raise_for_status()
-            answer = response.json()
-            return {
-                "transcription": transcribed_text,
-                "chat_response": answer
-            }
-        except httpx.HTTPStatusError as e:
-            raise HTTPException(status_code=500, detail=f"Failed to get response from /ask: {e}")
+    return {"transcription": transcribed_text}
 
 
 @router.post("/ask")

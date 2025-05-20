@@ -1,19 +1,20 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { 
   Box, Typography, Paper, TextField, IconButton, 
-  Divider, Button, CircularProgress, Card, Stack, Chip,
-  Avatar, useTheme, List, ListItem, ListItemText, ListItemAvatar,
+  Divider, Button, CircularProgress, Card, Chip,
+  Avatar, List, ListItem, ListItemText, ListItemAvatar,
   Drawer, ListItemButton, Tooltip, Dialog, DialogActions, DialogContent,
   DialogContentText, DialogTitle
 } from '@mui/material';
 import { 
   Send, Mic, MicOff, AttachFile, Person, SmartToy, 
-  History, Menu, Delete, Refresh, Close, ChatBubble
+  History, Delete, Close, ChatBubble
 } from '@mui/icons-material';
 import { useChatContext } from '../context/ChatContext';
+import axios from 'axios';
 
 const ChatInterface = () => {
-  const theme = useTheme();
+  // const theme = useTheme();
   const { 
     messages, 
     isLoading, 
@@ -25,13 +26,49 @@ const ChatInterface = () => {
   } = useChatContext();
   
   const [input, setInput] = useState('');
-  const [isRecording, setIsRecording] = useState(false);
   const [file, setFile] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [confirmClearOpen, setConfirmClearOpen] = useState(false);
+  const [recording, setRecording] = useState(false);
+  const mediaRecorderRef = useRef(null);
+  const audioChunks = useRef([]);
   
   const fileInputRef = useRef(null);
   const messagesEndRef = useRef(null);
+
+  const startRecording = async () => {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorderRef.current = new MediaRecorder(stream);
+    audioChunks.current = [];
+
+    mediaRecorderRef.current.ondataavailable = event => {
+      if (event.data.size > 0) {
+        audioChunks.current.push(event.data);
+      }
+    };
+
+    mediaRecorderRef.current.onstop = async () => {
+      const audioBlob = new Blob(audioChunks.current, { type: 'audio/webm' });
+      const formData = new FormData();
+      formData.append('file', audioBlob, 'audio.webm');
+
+      try {
+        const res = await axios.post('http://127.0.0.1:8000/chat/transcribe', formData);
+        console.log(res.data);
+        setInput(res.data.transcription);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    mediaRecorderRef.current.start();
+    setRecording(true);
+  };
+
+  const stopRecording = () => {
+    mediaRecorderRef.current.stop();
+    setRecording(false);
+  };
 
   const handleSend = () => {
     if (input.trim() || file) {
@@ -48,17 +85,17 @@ const ChatInterface = () => {
     }
   };
 
-  const toggleRecording = () => {
-    setIsRecording(!isRecording);
-    if (!isRecording) {
-      // Start recording logic would go here
-      // For demo, simulate speech-to-text after delay
-      setTimeout(() => {
-        setInput('What are the key components of a valid contract?');
-        setIsRecording(false);
-      }, 2000);
-    }
-  };
+  // const toggleRecording = () => {
+  //   setIsRecording(!isRecording);
+  //   if (!isRecording) {
+  //     // Start recording logic would go here
+  //     // For demo, simulate speech-to-text after delay
+  //     setTimeout(() => {
+  //       setInput('What are the key components of a valid contract?');
+  //       setIsRecording(false);
+  //     }, 2000);
+  //   }
+  // };
 
   const handleFileUpload = (e) => {
     if (e.target.files[0]) {
@@ -426,17 +463,17 @@ const ChatInterface = () => {
           />
           
           <IconButton 
-            color={isRecording ? "error" : "primary"} 
-            onClick={toggleRecording}
+            color={recording ? "error" : "primary"} 
+            onClick={recording ? stopRecording : startRecording}
             sx={{ 
               mr: 1,
-              bgcolor: isRecording ? 'error.dark' : 'background.subtle',
+              bgcolor: recording ? 'error.dark' : 'background.subtle',
               '&:hover': {
-                bgcolor: isRecording ? 'error.dark' : 'background.subtle',
+                bgcolor: recording ? 'error.dark' : 'background.subtle',
               }
             }}
           >
-            {isRecording ? <MicOff /> : <Mic />}
+            {recording ? <MicOff /> : <Mic />}
           </IconButton>
           
           <IconButton 
