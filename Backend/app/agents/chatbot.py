@@ -15,7 +15,7 @@ async def query_or_respond(messages: list):
     # Original one was llm_with_tools = llm.bind_tools([retrieve]) then it changes to
     # llm_with_tools = await llm.bind_tools([retrieve])
 
-    llm_with_tools = await llm.bind_tools([retrieve])
+    llm_with_tools = llm.bind_tools([retrieve])
     response = await llm_with_tools.ainvoke(messages)
     try:
         tool_call = response.tool_calls[0]
