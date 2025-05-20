@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import  { useState, useRef, useEffect } from 'react';
 import { 
   Box, Typography, Paper, TextField, IconButton, 
   Divider, Button, CircularProgress, Card, Stack, Chip,
@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import { 
   Send, Mic, MicOff, AttachFile, Person, SmartToy, 
-  History, Menu, Delete, Refresh, Close, ChatBubble
+  History, Delete, Close, ChatBubble
 } from '@mui/icons-material';
 import { useChatContext } from '../context/ChatContext';
 
