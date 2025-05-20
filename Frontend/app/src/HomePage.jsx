@@ -322,17 +322,17 @@ const HomePage = ({ showNavbar = true }) => {
         </div>
         <div className="footer-bottom">
           <p>&copy; 2025 LegalAI. All rights reserved.</p>
-          <div className="footer-social">
-            <a href="#" aria-label="LinkedIn">
+          {/* <div className="footer-social">
+            <a href="/" aria-label="LinkedIn">
               <i className="fab fa-linkedin"></i>
             </a>
-            <a href="#" aria-label="Twitter">
+            <a href="/" aria-label="Twitter">
               <i className="fab fa-twitter"></i>
             </a>
-            <a href="#" aria-label="Facebook">
+            <a href="/" aria-label="Facebook">
               <i className="fab fa-facebook"></i>
             </a>
-          </div>
+          </div> */}
         </div>
       </footer>
     </div>
