@@ -20,7 +20,7 @@ const AppLayout = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [open, setOpen] = useState(!isMobile);
-  const { logout, user } = useAuth();
+  const { logout} = useAuth();
 
   const handleDrawerToggle = () => {
     setOpen(!open);

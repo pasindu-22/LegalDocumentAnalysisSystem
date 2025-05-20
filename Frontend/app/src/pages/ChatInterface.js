@@ -1,19 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { 
   Box, Typography, Paper, TextField, IconButton, 
-  Divider, Button, CircularProgress, Card, Stack, Chip,
+  Divider, Button, CircularProgress, Card,  Chip,
   Avatar, useTheme, List, ListItem, ListItemText, ListItemAvatar,
   Drawer, ListItemButton, Tooltip, Dialog, DialogActions, DialogContent,
   DialogContentText, DialogTitle
 } from '@mui/material';
 import { 
   Send, Mic, MicOff, AttachFile, Person, SmartToy, 
-  History, Menu, Delete, Refresh, Close, ChatBubble
+  History,  Delete,  Close, ChatBubble
 } from '@mui/icons-material';
 import { useChatContext } from '../context/ChatContext';
 
 const ChatInterface = () => {
-  const theme = useTheme();
+  // const theme = useTheme();
   const { 
     messages, 
     isLoading, 

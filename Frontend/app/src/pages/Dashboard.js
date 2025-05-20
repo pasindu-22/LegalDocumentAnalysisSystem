@@ -11,7 +11,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
-  const theme = useTheme();
+  // const theme = useTheme();
   const navigate = useNavigate();
   
   return (

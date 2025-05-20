@@ -7,7 +7,7 @@ import {
 import { useState } from 'react';
 
 const PredictCase = () => {
-  const theme = useTheme();
+//   const theme = useTheme();
   const { token } = useAuth();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
