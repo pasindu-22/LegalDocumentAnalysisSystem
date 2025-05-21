@@ -65,7 +65,7 @@ classifier_chain: Runnable = (
 # Prompt for RAG
 rag_prompt = ChatPromptTemplate.from_messages([
     ("system", "You are a legal assistant. Only answer using the documents below. If nothing is relevant, say so."),
-    MessagesPlaceholder(variable_name="chat_history"),  # ✅ placeholder for memory
+    MessagesPlaceholder(variable_name="chat_history"),  #  placeholder for memory
     ("human", "Documents:\n{context}\n\nQuestion: {question}")
 ])
 
@@ -100,7 +100,7 @@ def ask_legal_bot(user_input: str) -> str:
     decision = classifier_chain.invoke({"question": user_input}).strip().lower()
     print(f"[Classifier decision]: {decision}")
 
-    print("\n📜 Chat History:")
+    print(" Chat History:")
     # for msg in memory.chat_memory.messages:
     #     role = "User" if msg.type in ("human", "user") else "Assistant"
     #     print(f"{role}: {msg.content}")
@@ -137,11 +137,11 @@ def ask_legal_bot(user_input: str) -> str:
     
 
 # === CLI test ===
-if __name__ == "__main__":
+# if __name__ == "__main__":
 
-    print("🧑‍⚖️ Legal Assistant Ready. Type 'exit' to quit.\n")
-    while True:
-        user_input = input("🧑 You: ")
-        if user_input.lower() in {"exit", "quit"}:
-            break
-        print("🤖 Bot:", ask_legal_bot(user_input))
+#     print(" Legal Assistant Ready. Type 'exit' to quit.\n")
+#     while True:
+#         user_input = input("You: ")
+#         if user_input.lower() in {"exit", "quit"}:
+#             break
+#         print(" Bot:", ask_legal_bot(user_input))
