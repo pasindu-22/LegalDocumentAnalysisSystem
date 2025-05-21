@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import {
   Container, Typography, Box, Paper, Button, Divider, 
   Alert, CircularProgress, Stack, Card, CardContent,
-  useTheme, IconButton, Tooltip, Stepper, Step, StepLabel,
+  Stepper, Step, StepLabel,
   StepContent, StepButton
 } from '@mui/material';
 import {
   CloudUpload, InsertChartOutlined, CheckCircle, SkipNext,
-  DescriptionOutlined, BarChart, HelpOutline, VerifiedUser
+  DescriptionOutlined, BarChart, VerifiedUser
 } from '@mui/icons-material';
 import { useAuth } from '../context/AuthContext';
 import { theme} from '../theme';
