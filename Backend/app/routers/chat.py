@@ -3,7 +3,7 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from dependencies.auth import get_current_user
 from db import get_session
 from models.user import User
-from agents.chatbot import query_or_respond  # assuming your function is in this module
+from agents.chatbot import ask_legal_bot # assuming your function is in this module
 
 router = APIRouter(prefix="/chat", tags=["Chat"])
 
@@ -24,15 +24,7 @@ async def chat_with_bot(
     # db: AsyncSession = Depends(get_session)
 ):
     try:
-        messages = [
-            SystemMessage(content="""
-                You are a helpful assistant.
-                If you're unsure or need more context, use the retrieve tool.
-            """),
-            HumanMessage(content=question)
-        ]
-
-        response = await query_or_respond(messages)
+        response = ask_legal_bot(question)
         # chat_query = ChatQuery(
         #     user_id=user.id,
         #     question=question,

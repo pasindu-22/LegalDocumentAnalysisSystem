@@ -1,79 +1,147 @@
-import sys
 import os
 from dotenv import load_dotenv
-import asyncio
-from tools.retrieve import retrieve
+from langchain_postgres import PGVector
+from langchain_core.runnables import Runnable
+from langchain.memory import ConversationBufferMemory
+from langchain.prompts import ChatPromptTemplate,MessagesPlaceholder
 from langchain.chat_models import init_chat_model
 from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.runnables import RunnableMap
+from langchain.chains.combine_documents import create_stuff_documents_chain
+from langchain.chains.retrieval_qa.base import RetrievalQA
 from langchain_core.prompts import ChatPromptTemplate
+from services.llm_factory import llm
 
-async def query_or_respond(messages: list):
-    llm = init_chat_model("mistral-large-latest", model_provider="mistralai")
+# === Load environment variables ===
+load_dotenv()
 
-    # Await the bind_tools operation(Changed this beacause the original code was not async.It caused an error when I tried to run the testing code)
-    # Original one was llm_with_tools = llm.bind_tools([retrieve]) then it changes to
-    # llm_with_tools = await llm.bind_tools([retrieve])
+MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
+DATABASE_URL= os.getenv("DATABASE_URL")
+# USER_ID = os.getenv("USER_ID", "default-user-id")
 
-    llm_with_tools = llm.bind_tools([retrieve])
-    response = await llm_with_tools.ainvoke(messages)
-    try:
-        tool_call = response.tool_calls[0]
-        tool_name = tool_call["name"]
-        tool_args = tool_call["args"]
-    except (IndexError, KeyError, TypeError):
-        tool_call = tool_name = tool_args = None
+# === Initialize LLMs ===
+mistral = init_chat_model("mistral-large-latest", model_provider="mistralai")
 
-    if tool_name == "retrieve":
-        result = retrieve(tool_args["query"])   
-        messages.append(response)   
-        messages.append(
-            ToolMessage(content=result, tool_call_id=tool_call["id"])
-        )
 
-    usedRAG = False
-    for message in reversed(messages):
-        if isinstance(message, ToolMessage):
-            last_tool_message = message
-            usedRAG = True
-            break
+# === Vector store and retriever ===
+embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2")
 
-    if usedRAG:
-        prompt2 = f"""Based on the following context and conversation history, 
-        please provide a relevant and contextual response. If the answer cannot 
-        be derived from the context, then use your general knowledge
 
-        Context from documents:
-        {last_tool_message}
+vectorstore = PGVector(
+    collection_name="legal_docs",
+    connection=DATABASE_URL,
+    embeddings=embeddings,
+)
 
-        Previous conversation:
-        {messages} """
+retriever = vectorstore.as_retriever(
+    search_kwargs={"k": 4}
+)
 
-        final_message = await llm_with_tools.ainvoke(prompt2)
-        return final_message.content
+# === Conversation memory ===
+memory = ConversationBufferMemory(
+    memory_key="chat_history",
+    return_messages=True
+)
+# === Classifier LLMChain (to decide if RAG is needed) ===
+classification_prompt = ChatPromptTemplate.from_template("""
+You are a legal assistant.
 
-    return response.content
+Your task is to decide whether a given question requires access to specific legal documents to answer correctly.
 
-async def main():
-    load_dotenv()
+Respond with:
+- "yes" → if the question is about a specific clause, agreement, or content likely found in legal documents.
+- "no" → if the question is a general legal concept that can be answered without referencing documents.
 
-    langsmith_tracing = os.getenv("LANGSMITH_TRACING")
-    langsmith_api_key = os.getenv("LANGSMITH_API_KEY")
-    mistral_api_key = os.getenv("MISTRAL_API_KEY")
+Question: "{question}"
+""")
 
-    system_message = SystemMessage(content="""
-    You are a helpful assistant.
+classifier_chain: Runnable = (
+    classification_prompt
+    | llm
+    | StrOutputParser()
+)
 
-    If you are confident that you know the answer, reply directly to the user.
+# Prompt for RAG
+rag_prompt = ChatPromptTemplate.from_messages([
+    ("system", "You are a legal assistant. Only answer using the documents below. If nothing is relevant, say so."),
+    MessagesPlaceholder(variable_name="chat_history"),  # ✅ placeholder for memory
+    ("human", "Documents:\n{context}\n\nQuestion: {question}")
+])
 
-    However, if you are not confident or lack context, use the `retrieve` tool to fetch relevant information before answering. Use the tool when the user's question seems ambiguous, references unknown topics, or asks for specific content like "figures", "activities", or "sections".
-    """)
 
-    user_message = HumanMessage(content="ok can you tell about the five great debates from the retrieve tool?")
+# Create doc QA chain
+document_chain = create_stuff_documents_chain(llm=llm, prompt=rag_prompt)
 
-    messages = [system_message, user_message]
+#  RAG chain
+# qa_chain = RunnableMap({
+#     "context": retriever,
+#     "question": lambda x: x["question"]
+# }) | document_chain
 
-    print(await query_or_respond(messages))
+general_prompt = ChatPromptTemplate.from_messages([
+    ("system", "You are a friendly legal assistant. Help the user using your general knowledge."),
+    MessagesPlaceholder(variable_name="chat_history"),
+    ("human", "{question}")
+])
 
+# Wrap as a runnable
+general_chain = general_prompt | llm | StrOutputParser()
+
+# === Chatbot Function ===
+def ask_legal_bot(user_input: str) -> str:
+
+    # Step 1: Handle greetings
+    casual_keywords = ["hi", "hello", "bye", "thanks"]
+    if user_input.lower().strip() in casual_keywords:
+        return "Hello! How can I assist you with legal information today?"
+
+    # Step 2: Classify
+    decision = classifier_chain.invoke({"question": user_input}).strip().lower()
+    print(f"[Classifier decision]: {decision}")
+
+    print("\n📜 Chat History:")
+    # for msg in memory.chat_memory.messages:
+    #     role = "User" if msg.type in ("human", "user") else "Assistant"
+    #     print(f"{role}: {msg.content}")
+    print(memory.chat_memory.messages)
+
+    # Step 3: Based on classification
+    if decision == "yes":
+        print("Running RAG")
+        retrieved_docs = retriever.invoke(user_input)
+        chat_history = memory.load_memory_variables({})["chat_history"]
+        response = document_chain.invoke({
+            "question": user_input,
+            "context": retrieved_docs,
+            "chat_history": chat_history
+        })
+
+        memory.save_context({"question": user_input}, {"output": response})
+
+        # sources = response.get("source_documents", [])
+
+        # if not sources and len(response.split()) < 10:
+        #     return 'I couldn't find relevant legal documents to answer that. Please provide more context or upload documents."
+        return response
+
+    else:
+        print("[Running LLM-only]")
+        response = general_chain.invoke({
+            "question": user_input,
+            "chat_history": memory.load_memory_variables({})["chat_history"]
+        })
+        memory.save_context({"question": user_input}, {"output": response})
+        return response
+    
+    
+
+# === CLI test ===
 if __name__ == "__main__":
-    asyncio.run(main())
+
+    print("🧑‍⚖️ Legal Assistant Ready. Type 'exit' to quit.\n")
+    while True:
+        user_input = input("🧑 You: ")
+        if user_input.lower() in {"exit", "quit"}:
+            break
+        print("🤖 Bot:", ask_legal_bot(user_input))

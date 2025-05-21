@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Depends
 from sqlmodel import Session, select
 from db import engine, get_session
-from routers import auth,documents,predict,chat,docAnalysis,verify
+from routers import auth,documents,predict,chat,docAnalysis,verify,chat_upload
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(debug=True,title="Legal-AI")
@@ -28,3 +28,4 @@ app.include_router(predict.router)
 app.include_router(chat.router)
 app.include_router(docAnalysis.router)
 app.include_router(verify.router)
+app.include_router(chat_upload.router)
