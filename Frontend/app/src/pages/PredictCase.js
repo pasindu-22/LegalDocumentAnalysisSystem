@@ -10,6 +10,7 @@ import {
   DescriptionOutlined, BarChart, HelpOutline, VerifiedUser
 } from '@mui/icons-material';
 import { useAuth } from '../context/AuthContext';
+import { theme} from '../theme';
 
 const PredictCase = () => {
 //   const theme = useTheme();
